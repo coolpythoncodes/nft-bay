@@ -21,7 +21,7 @@ const Navbar = () => {
   return (
     <nav
       className={`navbar-boxshadow fixed ${
-        router.pathname === "/" ? "bg-[white]" : "lottery-hero"
+        router.pathname === "/" ? "bg-[white]" : "ash-card-fav"
       }  navbar`}
     >
       <div className="layout-container flex h-[55px] items-center justify-between md:h-20">
@@ -34,7 +34,13 @@ const Navbar = () => {
               <h1 className="text-2xl font-bold text-white">NFT</h1>
             </div>{" "}
             <div className="logo-line" />{" "}
-            <p className="m-0 text-2xl font-bold text-black">BAY</p>
+            <p
+              className={`m-0 text-2xl font-bold  ${
+                router.pathname === "/" ? "text-black" : "text-white"
+              } `}
+            >
+              BAY
+            </p>
           </div>
         </Link>
         <div className="hidden items-center gap-x-4 lg:flex xl:gap-x-8">
@@ -43,7 +49,7 @@ const Navbar = () => {
               <li key={`navlinks-${index}`}>
                 <Link
                   href={item.to}
-                  className={`text-lg font-medium   capitalize ${
+                  className={`text-lg font-medium capitalize ${
                     router.pathname === "/" ? "text-[#15324395]" : "text-white"
                   } hover:text-[#E8AE3D]`}
                 >
@@ -52,9 +58,7 @@ const Navbar = () => {
               </li>
             ))}
             <li>
-              <Button>
-                Connect Wallet
-              </Button>
+              <Button>Connect Wallet</Button>
             </li>
           </ul>
         </div>
@@ -73,7 +77,7 @@ const Navbar = () => {
         bodyStyle={{ background: "#242526" }}
         closable={false}
         title={
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
               <div className="bg-[#f44a33] p-[4px]">
                 <h1 className="text-2xl font-bold text-white">NFT</h1>
@@ -81,27 +85,28 @@ const Navbar = () => {
               <div className="logo-line " />{" "}
               <p className="m-0 text-2xl font-bold text-white">BAY</p>
             </div>
-            <CloseOutlined onClick={onClose} className=" text-white font-black text-2xl" />
+            <CloseOutlined
+              onClick={onClose}
+              className=" text-2xl font-black text-white"
+            />
           </div>
         }
         className="navbar-mobile"
       >
         <ul className="mb-10 flex flex-col gap-y-5 text-base font-normal capitalize leading-[19px] text-white">
-           {navlinks.map((item, index) => (
-              <li key={`mobile-navlinks-${index}`}>
-                <Link
-                  href={item.to}
-                  className="text-lg font-medium capitalize text-[#fff] hover:text-[#E8AE3D]"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Button className="mr-5">
-                Connect Wallet
-              </Button>
+          {navlinks.map((item, index) => (
+            <li key={`mobile-navlinks-${index}`}>
+              <Link
+                href={item.to}
+                className="text-lg font-medium capitalize text-[#fff] hover:text-[#E8AE3D]"
+              >
+                {item.name}
+              </Link>
             </li>
+          ))}
+          <li>
+            <Button className="mr-5">Connect Wallet</Button>
+          </li>
         </ul>
       </Drawer>
     </nav>
