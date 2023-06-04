@@ -6,11 +6,19 @@ import Link from "next/link";
 
 import { navlinks } from "~/utils/data";
 import { useRouter } from "next/router";
+import { useAccount, useDisconnect } from "wagmi";
+import { useWeb3Modal } from "@web3modal/react";
+import { formatWalletAddress } from "~/utils/helper";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  const { address, isConnected } = useAccount();
+  const { open: handleOpen } = useWeb3Modal();
+
+  const { disconnect } = useDisconnect();
+  console.log(isConnected);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -58,7 +66,15 @@ const Navbar = () => {
               </li>
             ))}
             <li>
-              <Button>Connect Wallet</Button>
+              <Button
+                onClick={isConnected ? () => disconnect() : () => handleOpen()}
+              >
+                <>
+                  {isConnected && address
+                    ? `${formatWalletAddress(address)}`
+                    : "Connect Wallet"}
+                </>
+              </Button>
             </li>
           </ul>
         </div>
