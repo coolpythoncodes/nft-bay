@@ -6,11 +6,19 @@ import Link from "next/link";
 
 import { navlinks } from "~/utils/data";
 import { useRouter } from "next/router";
+import { useAccount, useDisconnect } from "wagmi";
+import { useWeb3Modal } from "@web3modal/react";
+import { formatWalletAddress } from "~/utils/helper";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  const { address, isConnected } = useAccount();
+  const { open: handleOpen } = useWeb3Modal();
+
+  const { disconnect } = useDisconnect();
+  console.log(isConnected);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -52,8 +60,14 @@ const Navbar = () => {
               </li>
             ))}
             <li>
-              <Button>
-                Connect Wallet
+              <Button
+                onClick={isConnected ? () => disconnect() : () => handleOpen()}
+              >
+                <>
+                  {isConnected && address
+                    ? `${formatWalletAddress(address)}`
+                    : "Connect Wallet"}
+                </>
               </Button>
             </li>
           </ul>
@@ -73,7 +87,7 @@ const Navbar = () => {
         bodyStyle={{ background: "#242526" }}
         closable={false}
         title={
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
               <div className="bg-[#f44a33] p-[4px]">
                 <h1 className="text-2xl font-bold text-white">NFT</h1>
@@ -81,27 +95,28 @@ const Navbar = () => {
               <div className="logo-line " />{" "}
               <p className="m-0 text-2xl font-bold text-white">BAY</p>
             </div>
-            <CloseOutlined onClick={onClose} className=" text-white font-black text-2xl" />
+            <CloseOutlined
+              onClick={onClose}
+              className=" text-2xl font-black text-white"
+            />
           </div>
         }
         className="navbar-mobile"
       >
         <ul className="mb-10 flex flex-col gap-y-5 text-base font-normal capitalize leading-[19px] text-white">
-           {navlinks.map((item, index) => (
-              <li key={`mobile-navlinks-${index}`}>
-                <Link
-                  href={item.to}
-                  className="text-lg font-medium capitalize text-[#fff] hover:text-[#E8AE3D]"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Button className="mr-5">
-                Connect Wallet
-              </Button>
+          {navlinks.map((item, index) => (
+            <li key={`mobile-navlinks-${index}`}>
+              <Link
+                href={item.to}
+                className="text-lg font-medium capitalize text-[#fff] hover:text-[#E8AE3D]"
+              >
+                {item.name}
+              </Link>
             </li>
+          ))}
+          <li>
+            <Button className="mr-5">Connect Wallet</Button>
+          </li>
         </ul>
       </Drawer>
     </nav>
