@@ -1,3 +1,366 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .layout-container {
+    @apply mx-auto  w-11/12 max-w-screen-2xl;
+  }
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.logo-line {
+  width: 2px;
+  height: 40px;
+  margin: 0 10px;
+  background: linear-gradient(223.14deg, #e8ae3d -17.3%, #f44a33 101.56%);
+}
+
+.navbar-boxshadow {
+  width: 100vw;
+  z-index: 10;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 16px;
+}
+
+.ant-btn {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  -webkit-box-shadow: 0px 9px 37px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 9px 37px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .ant-btn {
+  background: linear-gradient(223.14deg, #e8ae3d -17.3%, #f44a33 101.56%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 500;
+  height: 50px;
+  padding: 0 35px;
+}
+
+.navbar .ant-btn:hover {
+  color: #fff !important;
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+}
+
+.navbar-mobile .ant-btn {
+  background: linear-gradient(223.14deg, #e8ae3d -17.3%, #f44a33 101.56%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 500;
+  height: 40px;
+  padding: 0 15px;
+}
+
+.navbar-mobile .ant-btn:hover {
+  color: #fff !important;
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+}
+
+.hero .btn-pok-2 {
+  color: #fff;
+  display: inline-block;
+  height: 50px;
+  padding: 0 35px;
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+  -webkit-box-shadow: 0px 9px 37px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 9px 37px rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+  border: none;
+}
+
+.hero .btn-pok-2:hover::after {
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+  color: #fff;
+}
+.hero .btn-pok-2:hover span {
+  -webkit-text-fill-color: white;
+}
+
+.hero .btn-pok-2:hover .winarrow {
+  color: #fff;
+}
+
+.hero .btn-pok-2::after {
+  position: absolute;
+  content: "";
+  left: 2px;
+  top: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: #fff;
+  z-index: -1;
+  border-radius: 50px;
+  opacity: 1;
+  -webkit-transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in;
+}
+
+.hero .btn-pok-2 > span {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: -webkit-linear-gradient(
+    219.47deg,
+    #f08b6b 15.1%,
+    #c5b310 86.62%
+  );
+}
+
+.hero .btn-pok-2 > .winarrow {
+  color: #f08b6b;
+}
+
+.win {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: -webkit-linear-gradient(
+    219.47deg,
+    #f08b6b 15.1%,
+    #c5b310 86.62%
+  );
+  font-weight: 600;
+  display: inline-block;
+}
+
+.winner {
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px,
+    rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+  width: 95%;
+  height: 350px;
+  overflow: hidden;
+  margin: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.winner-results {
+  padding: 40px;
+  border: 1px solid #f5f5f5;
+  overflow: hidden;
+  margin-bottom: 30px;
+  border-radius: 4px;
+  background: #fff;
+  position: relative;
+  width: 500px;
+}
+
+.draw-date {
+  position: absolute;
+  right: -50px;
+  top: 22px;
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+  width: 180px;
+  text-align: center;
+  height: 34px;
+  line-height: 34px;
+  color: #fff;
+  transform: rotate(45deg);
+  z-index: 2;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.winner-content {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.winner-content h4 {
+  font-size: 18px;
+}
+
+.winning-number {
+  display: block;
+  margin-top: 10px;
+}
+
+.winning-number li {
+  display: inline-block;
+}
+
+.winning-number li div {
+  display: block;
+  color: #fff;
+  background: #e8ae3d;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 700;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  margin: 0px 1px;
+}
+
+.jackpot {
+  font-weight: 700;
+  margin-top: 10px;
+  font-size: 18px;
+  display: block;
+}
+
+.how-it-works-box-shadow {
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px,
+    rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+  border-radius: 10px;
+}
+
+.ant-ribbon-wrapper .ant-ribbon {
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 0;
+}
+
+.ant-ribbon-wrapper .ant-ribbon-text {
+  font-size: 30px;
+  font-weight: 600;
+  color: #fff !important;
+}
+
+.ant-card .ant-card-head-title {
+  color: #3d6276;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.ant-card .ant-card-body {
+  color: #3d6276;
+  font-size: 16px;
+  border-color: transparent;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: #e5edf1;
+  font-size: 18px;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr > td {
+  font-size: 16px;
+}
+
+tr:nth-child(even) {
+  background-color: #f4f6f7;
+}
+
+tr:nth-child(odd) {
+  background-color: #e5edf1;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  border-color: #e8ae3d;
+}
+
+.ant-pagination .ant-pagination-item-active:hover {
+  border-color: #e8ae3d;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: #e8ae3d;
+}
+
+.ant-pagination .ant-pagination-item-active a:hover {
+  color: #e8ae3d;
+}
+
+.lottery-hero {
+  background: -webkit-linear-gradient(317.37deg, #114065 2.76%, #135766 63.36%);
+}
+
+.ant-tabs-tab:hover {
+  color: #ff6b00 !important;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #ff6b00;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  background-color: #ff6b00 !important;
+}
+
+.ant-tabs .ant-tabs-tab {
+  color: #567687;
+  font-size: 18px;
+  padding: 0;
+  font-weight: 600;
+}
+
+.cancle-btn {
+  border: 1px solid #b6c2c8;
+  font-weight: 500;
+  height: 45px;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  color: rgba(13, 59, 84, 0.8);
+  padding: 0 25px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer {
+  background: -webkit-linear-gradient(317.37deg, #114065 2.76%, #135766 63.36%);
+}
+
+@media (max-width: 768px) {
+  .winner-results {
+    padding: 40px 20px;
+  }
+
+  .winner-inner {
+    text-align: center;
+  }
+
+  .winner-content {
+    padding-left: 0px;
+    float: none;
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .round-border {
+    border-radius: 15px;
+  }
+
+  .ant-ribbon-wrapper .ant-ribbon {
+    width: 70px;
+  }
+
+  .ant-tabs .ant-tabs-tab {
+    font-size: 16px;
+  }
+
+  .cancle-btn {
+    width: 100%;
+  }
+}
