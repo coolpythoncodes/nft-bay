@@ -22,6 +22,7 @@ contract NFTMarketPlace is
 {
     using Counters for Counters.Counter;
     Counters.Counter private tokenIds;
+    // itemsIds is used to keep track of all items created
     Counters.Counter private itemsIds;
     Counters.Counter private soldIds;
 
@@ -62,6 +63,7 @@ contract NFTMarketPlace is
         if (msg.value != listingFee) revert ErrListingFee();
         if (_auction && _auctionEndTime <= block.timestamp)
             revert ErrAuctionEndTimeWrong();
+        if (_listed && _auction) revert ErrItemListed();
 
         uint auctionEndTime = _auction ? _auctionEndTime : 0;
 
@@ -80,7 +82,6 @@ contract NFTMarketPlace is
         });
 
         if (_listed || _auction) {
-            itemsIds.decrement();
             _transfer(msg.sender, address(this), _tokenId);
         }
 
@@ -96,22 +97,39 @@ contract NFTMarketPlace is
         uint _itemId,
         uint _price,
         bool _listed,
-        bool _auction
+        bool _auction,
+        uint _auctionEndTime
     ) external payable {
         DataTypes.MarketItem storage item = nfts[_itemId];
         if (item.nftOwner != msg.sender) revert ErrInvalidCaller();
         if (item.listed) revert ErrItemListed();
         if (item.auction) revert ErrItemIsAuction();
+        if (_listed && _auction) revert ErrItemListed();
         if (msg.value != listingFee) revert ErrListingFee();
 
-        createMarketItem(
-            _price,
+        if (_auction && _auctionEndTime <= block.timestamp)
+            revert ErrAuctionEndTimeWrong();
+
+        uint auctionEndTime = _auction ? _auctionEndTime : 0;
+
+        soldIds.decrement();
+
+        item.price = _price;
+        item.listed = _listed;
+        item.auction = _auction;
+        item.auctionEndTime = auctionEndTime;
+        highestBidder = payable(address(0));
+        highestBid = 0;
+
+        Events.ResellNftItem(
+            _itemId,
             item.tokenId,
-            _listed,
-            _auction,
-            item.auctionEndTime
+            payable(msg.sender),
+            _price,
+
         );
     }
+
 
     function buyNftItem(uint _itemId) external payable nonReentrant {
         DataTypes.MarketItem storage item = nfts[_itemId];
@@ -215,6 +233,56 @@ contract NFTMarketPlace is
             payable(itemHighestBidder),
             itemHighestBid
         );
+    }
+
+    // fetch items in market for sale or auction
+    function fetchMarketNftItems()
+        external
+        view
+        returns (DataTypes.MarketItem[] memory)
+    {
+        uint itemCount = itemsIds.current();
+        uint unsoldItemCount = itemCount - soldIds.current();
+        uint currentIndex = 0;
+
+        DataTypes.MarketItem[] memory items = new DataTypes.MarketItem[](
+            unsoldItemCount
+        );
+        for (uint i = 0; i < itemCount; i++) {
+            if (nfts[i + 1].listed == true || nfts[i + 1].auction == true) {
+                uint currentId = i + 1;
+                DataTypes.MarketItem memory currentItem = nfts[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
+    }
+
+    // fetch users owned nfts
+    function fetchMyNfts() external view returns (DataTypes.MarketItem[] memory) {
+        uint totalNftsItems = itemsIds.current();
+        uint userNftItemCount = 0;
+        uint currentIndex = 0;
+
+        for (uint i = 0; i < totalNftsItems; i++) {
+            if (nfts[i + 1].nftOwner == msg.sender) {
+                userNftItemCount += 1;
+            }
+        }
+
+        DataTypes.MarketItem[] memory items = new DataTypes.MarketItem[](
+            userNftItemCount
+        );
+        for (uint i = 0; i < userNftItemCount; i++) {
+            if (nfts[i + 1].nftOwner == msg.sender) {
+                uint currentId = i + 1;
+                DataTypes.MarketItem memory currentItem = nfts[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
     }
 
     function setRoyaltyFee(uint96 _feeNumerator) external onlyOwner {
