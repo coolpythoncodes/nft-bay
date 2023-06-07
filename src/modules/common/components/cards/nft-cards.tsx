@@ -37,7 +37,7 @@ const Nft = ({ title, ratio, amount, date, id }: INft) => {
               {title}
             </h4>
             <p className="mt-2 text-base font-bold text-[#999]">
-              {amount} ETH <span className="ml-4 text-[#0D3B54]">{ratio}</span>
+              {amount} USDC <span className="ml-4 text-[#0D3B54]">{ratio}</span>
             </p>
             <p className="mt-2 text-base font-semibold text-[#0D3B54]">
               Place a bid

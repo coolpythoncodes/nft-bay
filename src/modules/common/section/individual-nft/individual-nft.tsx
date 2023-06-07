@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import c2 from "../../../../../public/asset/hero/c2.jpg";
 import Image from "next/image";
 import CountdownTimer from "../../components/countdown-timer/countTimer";
 import { Button } from "antd";
+import BuyModal from "./buy-modal";
+import BidModal from "./bid-modal";
 
 const IndividualNft = () => {
+  const [showBuyModal, setShowBuyModal] = useState<boolean>(false);
+  const [showBidModal, setShowBidModal] = useState<boolean>(false);
+
   const targetDate = new Date("2023-12-31T23:59:59");
   return (
     <main>
       <div className=" layout-container mb-20">
-        <div className="w-full items-center justify-between md:flex mt-10">
-          <div className="donation-goals-con md:block md:w-[47%] md:mb-0 mb-5">
+        <div className="mt-10 w-full items-center justify-between md:flex">
+          <div className="donation-goals-con mb-5 md:mb-0 md:block md:w-[47%]">
             <div className="relative h-[50vh] w-full lg:h-[85vh]">
               <Image src={c2} alt="campaign" sizes="100%" fill />
             </div>
@@ -36,7 +41,7 @@ const IndividualNft = () => {
                 Bid
               </h2>
               <p className="m-0 p-0 text-lg font-normal text-[#15324395]">
-                Bid accepted <span className="font-bold">0.005 ETH</span>
+                Bid accepted <span className="font-bold">0.005 USDC</span>
               </p>
               <p className="text-base font-normal text-[#15324395]">
                 by{" "}
@@ -52,38 +57,42 @@ const IndividualNft = () => {
                 Price
               </h2>
               <p className="text-2xl font-bold capitalize text-[#0D3B54] md:text-3xl">
-                0.059 ETH
+                0.059 USDC
               </p>
             </div>
             <div className="mb-20 mt-5 md:mb-0">
               <ul className="flex items-center gap-x-4 xl:gap-x-8">
                 <li className="navbar">
-                  <Button className="text-base font-normal capitalize">
+                  <Button className="text-base font-normal capitalize" onClick={() => setShowBuyModal(true)}>
                     Buy Now
                   </Button>
                 </li>
                 <li>
-                  <Button className="btn-pok-2 text-base font-normal capitalize">
+                  <Button className="btn-pok-2 text-base font-normal capitalize" onClick={() => setShowBidModal(true)}>
                     <span>Place a Bid</span>
                   </Button>
                 </li>
               </ul>
             </div>
-            {/* ) : null} */}
-            {/* <WordsOfSupport {...{ campaignId, campaign }} /> */}
           </div>
         </div>
       </div>
 
-      {/* <DonateModal
-        showDonateModal={showDonateModal}
-        onComplete={() => setShowDonateModal(!showDonateModal)}
-        fundraiser={campaign?.fundraiser}
-        campaignId={campaignId}
-        campaign={campaign}
-        setDonors={setDonors}
-        setPercent={setPercent}
-      /> */}
+      <BuyModal
+        showBuyModal={showBuyModal}
+        onComplete={() => setShowBuyModal(!showBuyModal)}
+        title="Deep Sea Phantasy"
+        amount= {0.059}
+        noOfNft = {14}
+      />
+
+      <BidModal
+        showBidModal={showBidModal}
+        onComplete={() => setShowBidModal(!showBidModal)}
+        title="Deep Sea Phantasy"
+        amount= {0.059}
+        noOfNft = {14}
+      />
     </main>
   );
 };
