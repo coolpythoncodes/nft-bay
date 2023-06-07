@@ -79,12 +79,12 @@ body {
   margin: 10px;
   border-radius: 10px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
 }
 
-.winner-inner{
+.winner-inner {
   padding: 10px;
   width: 100%;
 }
@@ -113,7 +113,6 @@ body {
 .winner-content h4 {
   font-size: 18px;
 }
-
 
 .how-it-works-box-shadow {
   box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px,
@@ -147,49 +146,69 @@ body {
   border-color: transparent;
 }
 
-.ant-table-wrapper .ant-table-thead > tr > th {
-  background-color: #e5edf1;
-  font-size: 18px;
-}
-
-.ant-table-wrapper .ant-table-tbody > tr > td {
-  font-size: 16px;
-}
-
-tr:nth-child(even) {
-  background-color: #f4f6f7;
-}
-
-tr:nth-child(odd) {
-  background-color: #e5edf1;
-}
-
-.ant-pagination .ant-pagination-item-active {
-  border-color: #e8ae3d;
-}
-
-.ant-pagination .ant-pagination-item-active:hover {
-  border-color: #e8ae3d;
-}
-
-.ant-pagination .ant-pagination-item-active a {
-  color: #e8ae3d;
-}
-
-.ant-pagination .ant-pagination-item-active a:hover {
-  color: #e8ae3d;
-}
-
-.ash-card-fav{
+.ash-card-fav {
   background: -webkit-linear-gradient(317.37deg, #114065 2.76%, #135766 63.36%);
 }
 
-.how-con:hover p{
+.how-con:hover p {
   color: white;
 }
 
 .lottery-hero:hover {
   background: -webkit-linear-gradient(317.37deg, #114065 2.76%, #135766 63.36%);
+}
+
+.btn-pok-2 {
+  color: #fff;
+  display: inline-block;
+  height: 50px;
+  padding: 0 35px;
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+  -webkit-box-shadow: 0px 9px 37px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 9px 37px rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+  border: none;
+}
+
+.btn-pok-2:hover::after {
+  background: linear-gradient(223.14deg, #f44a33 -17.3%, #e8ae3d 101.56%);
+  color: #fff;
+}
+
+.btn-pok-2 > span {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: -webkit-linear-gradient(
+    219.47deg,
+    #f08b6b 15.1%,
+    #c5b310 86.62%
+  );
+}
+
+.btn-pok-2:hover span {
+  -webkit-text-fill-color: white;
+}
+
+.btn-pok-2::after {
+  position: absolute;
+  content: "";
+  left: 2px;
+  top: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: #fff;
+  z-index: -1;
+  border-radius: 50px;
+  opacity: 1;
+  -webkit-transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in;
 }
 
 .ant-tabs-tab:hover {
@@ -223,6 +242,12 @@ tr:nth-child(odd) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.donation-goals-con {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 140px;
 }
 
 footer {

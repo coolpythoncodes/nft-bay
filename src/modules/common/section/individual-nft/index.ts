@@ -1,0 +1,1 @@
+export {default as IndividualNft} from "./individual-nft"
