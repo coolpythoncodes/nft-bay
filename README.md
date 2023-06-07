@@ -1,28 +1,72 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
 
-## What's next? How do I make an app with this?
+![](https://img.shields.io/badge/Hackathon-blueviolet)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+[![Contributors][contributors-shield]][contributors-url]
+[![GitHub issues][issues-shield]][issues-url]
+[![GitHub forks][forks-shield]][forks-url]
+[![GitHub stars][star-shield]][star-url]
+[![GitHub license][license-shield]][license-url]
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
 
-## Learn More
+# NFT Bay 
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+This project was bootstrapped with [`create-t3-app`](https://create.t3.gg/).
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Technology Stack & Tools
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- NextJS
+- Hardhat
+- Solidity
+- wagmi
+- Web3Modal
 
-## How do I deploy this?
+### Install
+```bash
+git clone https://github.com/coolpythoncodes/nft-bay
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+yarn install
+
+# create a web3modal project from https://cloud.walletconnect.com/sign-in 
+# to get WEB3_MODAL_PROJECT_ID
+
+- Copy `.env.example` to a new `.env` file on nft-bay root folder
+
+#Get your web development server running.
+pnpm dev
+```
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+Feel free to check the [issues page](../../issues/).
+
+## Show your support
+
+Give a ⭐ if you like this project!
+
+## Useful links
+
+- [Web3Modal Project ID](https://cloud.walletconnect.com/sign-in)
+
+
+[contributors-shield]: https://img.shields.io/github/contributors/coolpythoncodes/nft-bay?style=for-the-badge
+[contributors-url]: https://github.com/coolpythoncodes/nft-bay/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/coolpythoncodes/nft-bay?style=for-the-badge
+[issues-url]: https://github.com/coolpythoncodes/nft-bay/issues
+[forks-shield]: https://img.shields.io/github/forks/coolpythoncodes/nft-bay?style=for-the-badge
+[forks-url]: https://github.com/coolpythoncodes/nft-bay/network
+[star-shield]: https://img.shields.io/github/stars/coolpythoncodes/nft-bay?style=for-the-badge
+[star-url]: https://github.com/coolpythoncodes/nft-bay/stargazers
+[license-shield]: https://img.shields.io/github/license/coolpythoncodes/nft-bay?style=for-the-badge
+[license-url]: https://github.com/coolpythoncodes/nft-bay/blob/main/LICENSE.md
