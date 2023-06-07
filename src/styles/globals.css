@@ -244,11 +244,11 @@ body {
   align-items: center;
 }
 
-.donation-goals-con {
+/* .donation-goals-con {
   position: -webkit-sticky;
   position: sticky;
   top: 140px;
-}
+} */
 
 footer {
   background: -webkit-linear-gradient(317.37deg, #114065 2.76%, #135766 63.36%);
@@ -281,4 +281,9 @@ footer {
   .cancle-btn {
     width: 100%;
   }
+
+  /* .donation-goals-con {
+    position: relative;
+  } */
+  
 }
