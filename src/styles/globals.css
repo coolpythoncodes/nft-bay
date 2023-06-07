@@ -257,7 +257,7 @@ body {
   box-shadow: none;
 }
 
-input {
+input, .ant-picker {
   outline: none !important;
   width: 100% !important;
   height: 38px !important;
@@ -267,8 +267,68 @@ input {
   padding: 7px 14px;
 }
 
+.ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input{
+  border-color: #d0d5dd;
+}
+
 input[type="number"] {
   appearance: textfield;
+}
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
+  border-color: #f44a33;
+  background-color: #f44a33;
+}
+
+.ant-form input[type="radio"]:hover .ant-radio-inner {
+  border-color: #f44a33 !important;
+}
+
+.ant-upload {
+  outline: none !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  border: 3px dashed #f44a33!important;
+  border-radius: 4px !important;
+}
+
+.ant-upload button{
+  width: 100% !important;
+  height: 100px !important;
+  font-size: 18px;
+  background-color: transparent;
+  box-shadow: none !important;
+}
+
+.ant-upload-select >.ant-upload {
+  border: 1px solid transparent !important;
+}
+
+.ant-upload-select .ant-btn-default:not(:disabled):hover {
+  color: #000 !important;
+}
+
+.ant-upload-select button {
+  border: 1px solid transparent !important;
+}
+
+.ant-picker-input >input::placeholder {
+  font-size: 14px !important;
+  color: #8e8e8e !important;
+  font-weight: 400;
+}
+
+.ant-picker-input >input{
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-radius: 0 !important;
+}
+
+.ant-picker-focused {
+  border-color: #d0d5dd;
+  box-shadow: none;
+  border-inline-end-width: 1px;
+  outline: 0;
 }
 
 /* .donation-goals-con {
@@ -307,6 +367,10 @@ footer {
 
   .cancle-btn {
     width: 100%;
+  }
+
+  .ant-upload button{
+    font-size: 16px;
   }
 
   /* .donation-goals-con {
