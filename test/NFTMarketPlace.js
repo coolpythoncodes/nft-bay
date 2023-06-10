@@ -712,4 +712,118 @@ describe("NFTMarketPlace", () => {
       );
     });
   });
+
+  describe("place bid on auction items", () => {
+    let creator;
+    let buyer;
+    let buyer2;
+    let nftMarketItem;
+
+    const auctionItemDetails = {
+      tokenURI,
+      price: 2.5,
+      listed: false,
+      auction: true,
+      auctionEndTime: Math.floor(Date.now() / 1000) + 10800,
+    };
+
+    const listedItemDetails = {
+      tokenURI,
+      price: 2.5,
+      listed: true,
+      auction: false,
+      auctionEndTime: 0,
+    };
+
+    beforeEach(async () => {
+      [creator, buyer, buyer2] = await ethers.getSigners();
+
+      // Create NFT item and auction
+      await nftMarketPlaceContract
+        .connect(creator)
+        .createNftToken(
+          auctionItemDetails.tokenURI,
+          toWei(auctionItemDetails.price),
+          auctionItemDetails.listed,
+          auctionItemDetails.auction,
+          auctionItemDetails.auctionEndTime,
+          {
+            value: listingFee,
+          }
+        );
+
+      // Create NFT item and list it
+      await nftMarketPlaceContract
+        .connect(creator)
+        .createNftToken(
+          listedItemDetails.tokenURI,
+          toWei(listedItemDetails.price),
+          listedItemDetails.listed,
+          listedItemDetails.auction,
+          listedItemDetails.auctionEndTime,
+          {
+            value: listingFee,
+          }
+        );
+    });
+
+    it("should place bid on auction item", async () => {
+      // Place bid on auction item
+      const tx = await nftMarketPlaceContract
+        .connect(buyer)
+        .placeBid(1, {
+          from: buyer.address,
+          value: toWei(3),
+        });
+
+      // Verify that the item's highest bid has been updated.
+      nftMarketItem = await nftMarketPlaceContract.nfts(1);
+      expect(nftMarketItem.highestBidder).to.equal(buyer.address);
+      expect(+fromWei(nftMarketItem.highestBid)).to.equal(3);
+    })
+
+    it('should revert if nft item is not auctioned', async () => {
+      expect(nftMarketPlaceContract
+        .connect(buyer)
+        .placeBid(2, {
+          from: buyer.address,
+          value: toWei(3),
+        })).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrItemIsAuction");
+    })
+
+        it('should revert if the bid is less than the highest bid', async () => {
+      await nftMarketPlaceContract
+        .connect(buyer)
+        .placeBid(1, {
+          from: buyer.address,
+          value: toWei(3),
+        });
+
+      expect(nftMarketPlaceContract
+        .connect(buyer2)
+        .placeBid(1, {
+          from: buyer2.address,
+          value: toWei(2),
+        })).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrInvalidBid");
+    })
+
+    it('should revert if the auction has ended', async () => {
+      await ethers.provider.send("evm_increaseTime", [172800]);
+      await ethers.provider.send("evm_mine");
+
+      expect(nftMarketPlaceContract
+        .connect(buyer)
+        .placeBid(1, {
+          from: buyer.address,
+          value: toWei(3),
+        })).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrAuctionEnded");
+
+    });
+
+  });
+
+  // describe('end auction', () => {
+    
+  // });
+  
 });

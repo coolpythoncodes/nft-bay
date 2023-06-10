@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
-import {ErrPriceZero, ErrListingFee, ErrAuctionStartTimeWrong, ErrItemListed, ErrHasNotAuctionEnded, ErrInvalidCaller, ErrAuctionEndTimeWrong, ErrPriceNotEqual, ErrItemNotListed, ErrItemIsAuction, ErrInvalidBid, ErrAuctionEnded,ErrTokenExists} from "./libraries/Error.sol";
+import {ErrPriceZero, ErrListingFee, ErrAuctionStartTimeWrong, ErrItemListed, ErrHasNotAuctionEnded, ErrInvalidCaller, ErrAuctionEndTimeWrong, ErrPriceNotEqual, ErrItemNotListed, ErrItemIsAuction, ErrInvalidBid, ErrAuctionEnded, ErrTokenExists} from "./libraries/Error.sol";
 
 contract NFTMarketPlace is
     ERC721,
@@ -59,7 +59,6 @@ contract NFTMarketPlace is
         bool _auction,
         uint _auctionEndTime
     ) private {
-
         if (price <= 0) revert ErrPriceZero();
 
         if (msg.value != listingFee) revert ErrListingFee();
@@ -117,8 +116,8 @@ contract NFTMarketPlace is
         uint auctionEndTime = _auction ? _auctionEndTime : 0;
 
         soldIds.decrement();
-        
-         if (_listed || _auction) {
+
+        if (_listed || _auction) {
             _transfer(msg.sender, address(this), item.tokenId);
         }
 
@@ -184,10 +183,19 @@ contract NFTMarketPlace is
         if (item.auction == false) revert ErrItemIsAuction();
         if (block.timestamp >= item.auctionEndTime) revert ErrAuctionEnded();
         if (msg.value <= item.highestBid) revert ErrInvalidBid();
+        address previousHighestBidder = item.highestBidder;
+        uint previousHighestBid = item.highestBid;
 
-        // Refund the previous highest bidder
-        (bool success, ) = item.highestBidder.call{value: item.highestBid}("");
-        require(success, "tranfer to previous highest bidder failed");
+        item.highestBidder = payable(msg.sender);
+        item.highestBid = msg.value;
+
+        if (previousHighestBidder != address(0)) {
+            // Refund the previous highest bidder
+            (bool success, ) = previousHighestBidder.call{value: previousHighestBid}(
+                ""
+            );
+            require(success, "tranfer to previous highest bidder failed");
+        }
 
         emit Events.PlacedBid(
             _itemsId,
@@ -306,8 +314,6 @@ contract NFTMarketPlace is
     function updateListingFee(uint _listingFee) external onlyOwner {
         listingFee = _listingFee;
     }
-
-       
 
     // The following functions are overrides required by Solidity.
 
