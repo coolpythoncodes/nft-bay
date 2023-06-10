@@ -24,3 +24,5 @@ error ErrHasNotAuctionEnded();
 error ErrInvalidCaller();
 
 error ErrItemListed();
+
+error ErrTokenExists();

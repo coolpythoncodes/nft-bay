@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Events} from "./libraries/Events.sol";
-import {ErrPriceZero, ErrListingFee, ErrAuctionStartTimeWrong, ErrItemListed, ErrHasNotAuctionEnded, ErrInvalidCaller, ErrAuctionEndTimeWrong, ErrPriceNotEqual, ErrItemNotListed, ErrItemIsAuction, ErrInvalidBid, ErrAuctionEnded} from "./libraries/Error.sol";
+import {ErrPriceZero, ErrListingFee, ErrAuctionStartTimeWrong, ErrItemListed, ErrHasNotAuctionEnded, ErrInvalidCaller, ErrAuctionEndTimeWrong, ErrPriceNotEqual, ErrItemNotListed, ErrItemIsAuction, ErrInvalidBid, ErrAuctionEnded,ErrTokenExists} from "./libraries/Error.sol";
 
 contract NFTMarketPlace is
     ERC721,
@@ -41,6 +41,7 @@ contract NFTMarketPlace is
         bool _auction,
         uint _auctionEndTime
     ) external payable returns (uint) {
+         if(_exists(_tokenId)) revert ErrTokenExists();
         tokenIds.increment();
 
         uint newItemId = tokenIds.current();
@@ -59,10 +60,14 @@ contract NFTMarketPlace is
         bool _auction,
         uint _auctionEndTime
     ) private {
+
         if (price <= 0) revert ErrPriceZero();
+
         if (msg.value != listingFee) revert ErrListingFee();
+
         if (_auction && _auctionEndTime <= block.timestamp)
             revert ErrAuctionEndTimeWrong();
+
         if (_listed && _auction) revert ErrItemListed();
 
         uint auctionEndTime = _auction ? _auctionEndTime : 0;
@@ -118,18 +123,16 @@ contract NFTMarketPlace is
         item.listed = _listed;
         item.auction = _auction;
         item.auctionEndTime = auctionEndTime;
-        highestBidder = payable(address(0));
-        highestBid = 0;
+        item.highestBidder = payable(address(0));
+        item.highestBid = 0;
 
-        Events.ResellNftItem(
+        emit Events.ResellNftItem(
             _itemId,
             item.tokenId,
             payable(msg.sender),
-            _price,
-
+            _price
         );
     }
-
 
     function buyNftItem(uint _itemId) external payable nonReentrant {
         DataTypes.MarketItem storage item = nfts[_itemId];
@@ -260,7 +263,11 @@ contract NFTMarketPlace is
     }
 
     // fetch users owned nfts
-    function fetchMyNfts() external view returns (DataTypes.MarketItem[] memory) {
+    function fetchMyNfts()
+        external
+        view
+        returns (DataTypes.MarketItem[] memory)
+    {
         uint totalNftsItems = itemsIds.current();
         uint userNftItemCount = 0;
         uint currentIndex = 0;
@@ -296,6 +303,8 @@ contract NFTMarketPlace is
     function updateListingFee(uint _listingFee) external onlyOwner {
         listingFee = _listingFee;
     }
+
+       
 
     // The following functions are overrides required by Solidity.
 

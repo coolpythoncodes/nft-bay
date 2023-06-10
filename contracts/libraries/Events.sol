@@ -31,4 +31,11 @@ library Events {
         address  payable  highestBidder,
         uint256 price
     );
+
+    event ResellNftItem(
+        uint indexed itemId,
+        uint256 indexed tokenId,
+        address payable nftOwner,
+        uint256 price
+    );
 }
