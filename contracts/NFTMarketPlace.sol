@@ -117,6 +117,10 @@ contract NFTMarketPlace is
         uint auctionEndTime = _auction ? _auctionEndTime : 0;
 
         soldIds.decrement();
+        
+         if (_listed || _auction) {
+            _transfer(msg.sender, address(this), item.tokenId);
+        }
 
         item.price = _price;
         item.listed = _listed;
