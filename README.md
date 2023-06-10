@@ -20,6 +20,16 @@
 
 # NFT Bay 
 
+### Brief description
+
+NFT Bay is a decentralized marketplace that empowers users to create, sell, and auction Non-Fungible Tokens (NFTs). 
+
+NFT Bay enables creators to mint and showcase their unique NFT creations, while buyers can browse a diverse range of digital assets and securely transact using cryptocurrency. 
+
+Through its auction functionality, NFT Bay offers an exciting opportunity for users to participate in bidding wars and discover rare and exclusive NFTs. 
+
+With a focus on community, transparency, and innovation, NFT Bay aims to revolutionize the NFT ecosystem by fostering creativity, enabling fair value exchange, and empowering artists and collectors alike with royalties.
+
 This project was bootstrapped with [`create-t3-app`](https://create.t3.gg/).
 
 ## Technology Stack & Tools
