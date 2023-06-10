@@ -191,9 +191,9 @@ contract NFTMarketPlace is
 
         if (previousHighestBidder != address(0)) {
             // Refund the previous highest bidder
-            (bool success, ) = previousHighestBidder.call{value: previousHighestBid}(
-                ""
-            );
+            (bool success, ) = previousHighestBidder.call{
+                value: previousHighestBid
+            }("");
             require(success, "tranfer to previous highest bidder failed");
         }
 
@@ -208,7 +208,7 @@ contract NFTMarketPlace is
     function endAuction(uint _itemsId) external payable {
         DataTypes.MarketItem storage item = nfts[_itemsId];
         if (item.auction == false) revert ErrItemIsAuction();
-        if (block.timestamp > item.auctionEndTime)
+        if (block.timestamp < item.auctionEndTime)
             revert ErrHasNotAuctionEnded();
         if (msg.sender != item.nftOwner) revert ErrInvalidCaller();
 
