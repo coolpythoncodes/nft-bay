@@ -222,6 +222,12 @@ describe("NFTMarketPlace", () => {
   });
 
   describe("Buy NFT item", () => {
+    let creator;
+    let buyer;
+    let nftOwner;
+    let newNftOwner;
+    
+    let creatorBalanceBefore;
     const ListedNFTItem = {
       tokenURI,
       price: 2.5,
@@ -230,41 +236,69 @@ describe("NFTMarketPlace", () => {
       auctionEndTime: 0,
     };
 
+    const NotListedNFTItem = {
+      tokenURI,
+      price: 2.5,
+      listed: false,
+      auction: false,
+      auctionEndTime: 0,
+    };
+
     const AuctionedNFTItem = {
       tokenURI,
-      price: 4.5,
+      price: 2.5,
       listed: false,
       auction: true,
-      auctionEndTime: _auctionEnd,
+      auctionEndTime:  Math.floor(Date.now() / 1000) + 10800,
     };
 
     beforeEach(async () => {
-      await nftMarketPlaceContract.createNftToken(
-        ListedNFTItem.tokenURI,
-        toWei(ListedNFTItem.price),
-        ListedNFTItem.listed,
-        ListedNFTItem.auction,
-        ListedNFTItem.auctionEndTime,
+      [creator, buyer] = await ethers.getSigners();
+
+      await nftMarketPlaceContract
+        .connect(creator)
+        .createNftToken(
+          ListedNFTItem.tokenURI,
+          toWei(ListedNFTItem.price),
+          ListedNFTItem.listed,
+          ListedNFTItem.auction,
+          ListedNFTItem.auctionEndTime,
+          {
+            value: listingFee,
+          }
+        );
+
+      await nftMarketPlaceContract
+        .connect(creator)
+        .createNftToken(
+          NotListedNFTItem.tokenURI,
+          toWei(NotListedNFTItem.price),
+          NotListedNFTItem.listed,
+          NotListedNFTItem.auction,
+          NotListedNFTItem.auctionEndTime,
+          {
+            value: listingFee,
+          }
+        );
+
+      await nftMarketPlaceContract.connect(creator).createNftToken(
+        AuctionedNFTItem.tokenURI,
+        toWei(AuctionedNFTItem.price),
+        AuctionedNFTItem.listed,
+        AuctionedNFTItem.auction,
+        AuctionedNFTItem.auctionEndTime,
         {
           value: listingFee,
         }
       );
 
-      // await nftMarketPlaceContract.createNftToken(
-      //   AuctionedNFTItem.tokenURI,
-      //   toWei(AuctionedNFTItem.price),
-      //   AuctionedNFTItem.listed,
-      //   AuctionedNFTItem.auction,
-      //   AuctionedNFTItem.auctionEndTime,
-      //   {
-      //     value: listingFee,
-      //   }
-      // );
+      creatorBalanceBefore = await ethers.provider.getBalance(creator.address);
+      // console.log("creatorBalanceBefore", fromWei(creatorBalanceBefore));
     });
-
 
     it("Should buy listed nft item with the correct price", async () => {
       let nftToken = await nftMarketPlaceContract.nfts(1);
+      nftOwner = nftToken.nftOwner;
 
       const tx = await nftMarketPlaceContract.connect(addr2).buyNftItem(1, {
         from: addr2.address,
@@ -282,6 +316,48 @@ describe("NFTMarketPlace", () => {
       // Verify that the item is not auctioned.
       expect(nftToken.auction).to.equal(false);
 
+      // Verify the correct amount of ether has been transferred to the previous owner
+      // const previousOwnerBalance = await ethers.provider.getBalance(nftOwner);
+      // console.log("previousOwnerBalance", fromWei(previousOwnerBalance));
+      // expect(await addr1.getBalance()).to.equal()
     });
+
+    it("should revert if msg value is not equal to nft item price", async () => {
+      expect(
+        nftMarketPlaceContract.connect(addr2).buyNftItem(1, {
+          from: addr2.address,
+          value: toWei(ListedNFTItem.price - 0.001),
+        })
+      ).to.be.revertedWithCustomError(
+        nftMarketPlaceContract,
+        "ErrPriceNotEqual"
+      );
+    });
+
+    it("should revert if nft item is not listed", async () => {
+      nftToken = await nftMarketPlaceContract.nfts(2);
+      expect(
+        nftMarketPlaceContract.connect(addr2).buyNftItem(2, {
+          from: addr2.address,
+          value: nftToken.price,
+        })
+      ).to.be.revertedWithCustomError(
+        nftMarketPlaceContract,
+        "ErrItemNotListed"
+      );
+    });
+
+    it("should revert if nft item is auctioned", async () => {
+      nftToken = await nftMarketPlaceContract.nfts(3);
+      expect(
+        nftMarketPlaceContract.connect(addr2).buyNftItem(3, {
+          from: addr2.address,
+          value: nftToken.price,
+        })
+      ).to.be.revertedWithCustomError(
+        nftMarketPlaceContract,
+        "ErrItemIsAuction"
+      );
+    })
   });
 });
