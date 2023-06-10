@@ -11,7 +11,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <>
       <WagmiConfig config={wagmiConfig}>
         <Layout>
-          <div className="pt-[55px] md:pt-20">
+          <div className="pt-[55px] md:pt-20 min-h-screen">
             <Component {...pageProps} />
           </div>
         </Layout>
