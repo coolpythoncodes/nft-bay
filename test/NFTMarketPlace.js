@@ -40,26 +40,23 @@ describe("NFTMarketPlace", () => {
 
   describe("create nft token", () => {
     let price = 2.5;
-    let tokenId1 = 1;
-    let tokenId2 = 2;
-    let tokenId3 = 3;
-    let tokenId4 = 4;
     let listed = false;
     let auction = false;
     let auctionEndTime = 0;
 
     it("Should create nft token and if not listed or auctioned, nft should not be transferred to the marketplace ", async () => {
-      const tx = await nftMarketPlaceContract.connect(addr1).createNftToken(
-        tokenURI,
-        toWei(price),
-        // tokenId1,
-        listed,
-        auction,
-        auctionEndTime,
-        {
-          value: listingFee,
-        }
-      );
+      const tx = await nftMarketPlaceContract
+        .connect(addr1)
+        .createNftToken(
+          tokenURI,
+          toWei(price),
+          listed,
+          auction,
+          auctionEndTime,
+          {
+            value: listingFee,
+          }
+        );
 
       const nftToken = await nftMarketPlaceContract.nfts(1);
       expect(+fromWei(nftToken.price)).to.equal(price);
@@ -221,6 +218,70 @@ describe("NFTMarketPlace", () => {
             }
           )
       ).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrItemListed");
+    });
+  });
+
+  describe("Buy NFT item", () => {
+    const ListedNFTItem = {
+      tokenURI,
+      price: 2.5,
+      listed: true,
+      auction: false,
+      auctionEndTime: 0,
+    };
+
+    const AuctionedNFTItem = {
+      tokenURI,
+      price: 4.5,
+      listed: false,
+      auction: true,
+      auctionEndTime: _auctionEnd,
+    };
+
+    beforeEach(async () => {
+      await nftMarketPlaceContract.createNftToken(
+        ListedNFTItem.tokenURI,
+        toWei(ListedNFTItem.price),
+        ListedNFTItem.listed,
+        ListedNFTItem.auction,
+        ListedNFTItem.auctionEndTime,
+        {
+          value: listingFee,
+        }
+      );
+
+      // await nftMarketPlaceContract.createNftToken(
+      //   AuctionedNFTItem.tokenURI,
+      //   toWei(AuctionedNFTItem.price),
+      //   AuctionedNFTItem.listed,
+      //   AuctionedNFTItem.auction,
+      //   AuctionedNFTItem.auctionEndTime,
+      //   {
+      //     value: listingFee,
+      //   }
+      // );
+    });
+
+
+    it("Should buy listed nft item with the correct price", async () => {
+      let nftToken = await nftMarketPlaceContract.nfts(1);
+
+      const tx = await nftMarketPlaceContract.connect(addr2).buyNftItem(1, {
+        from: addr2.address,
+        value: nftToken.price,
+      });
+
+      nftToken = await nftMarketPlaceContract.nfts(1);
+
+      // Verify that the item's ownership has been transferred to the buyer.
+      expect(await nftMarketPlaceContract.ownerOf(1)).to.equal(addr2.address);
+
+      // Verify that the item is no longer listed.
+      expect(nftToken.listed).to.equal(false);
+
+      // Verify that the item is not auctioned.
+      expect(nftToken.auction).to.equal(false);
+
     });
   });
 });
