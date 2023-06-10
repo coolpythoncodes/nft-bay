@@ -211,6 +211,11 @@ contract NFTMarketPlace is
         if (block.timestamp < item.auctionEndTime)
             revert ErrHasNotAuctionEnded();
         if (msg.sender != item.nftOwner) revert ErrInvalidCaller();
+        if (item.highestBidder == address(0)) {
+            item.auction = false;
+            _transfer(address(this), item.nftOwner, item.tokenId);
+            return;
+        }
 
         address itemHighestBidder = item.highestBidder;
         uint itemHighestBid = item.highestBid;

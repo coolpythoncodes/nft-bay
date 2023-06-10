@@ -911,5 +911,21 @@ describe("NFTMarketPlace", () => {
         });
       expect(nftMarketPlaceContract.connect(creator).endAuction(1)).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrHasNotAuctionEnded");
     });
+
+    it('should revert if caller is not owner of nft', async () => {
+      await ethers.provider.send("evm_increaseTime", [11800]);
+      await ethers.provider.send("evm_mine");
+      expect(nftMarketPlaceContract.connect(buyer).endAuction(1)).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrInvalidCaller");
+    });
+
+    it('should return nft to owner if there is no bid', async() => {
+      await ethers.provider.send("evm_increaseTime", [11800]);
+      await ethers.provider.send("evm_mine");
+
+      await nftMarketPlaceContract.connect(creator).endAuction(1);
+      expect(await nftMarketPlaceContract.ownerOf(1)).to.equal(creator.address);
+    });
+    
+
   })
 });
