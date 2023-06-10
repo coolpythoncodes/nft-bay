@@ -36,12 +36,11 @@ contract NFTMarketPlace is
     function createNftToken(
         string calldata _tokenURI,
         uint price,
-        uint _tokenId,
+        // uint _tokenId,
         bool _listed,
         bool _auction,
         uint _auctionEndTime
     ) external payable returns (uint) {
-         if(_exists(_tokenId)) revert ErrTokenExists();
         tokenIds.increment();
 
         uint newItemId = tokenIds.current();
@@ -49,7 +48,7 @@ contract NFTMarketPlace is
         _setTokenURI(newItemId, _tokenURI);
         _setTokenRoyalty(newItemId, msg.sender, feeNumerator);
 
-        createMarketItem(price, _tokenId, _listed, _auction, _auctionEndTime);
+        createMarketItem(price, newItemId, _listed, _auction, _auctionEndTime);
         return newItemId;
     }
 

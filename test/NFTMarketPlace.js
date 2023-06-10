@@ -49,19 +49,17 @@ describe("NFTMarketPlace", () => {
     let auctionEndTime = 0;
 
     it("Should create nft token and if not listed or auctioned, nft should not be transferred to the marketplace ", async () => {
-      const tx = await nftMarketPlaceContract
-        .connect(addr1)
-        .createNftToken(
-          tokenURI,
-          toWei(price),
-          tokenId1,
-          listed,
-          auction,
-          auctionEndTime,
-          {
-            value: listingFee,
-          }
-        );
+      const tx = await nftMarketPlaceContract.connect(addr1).createNftToken(
+        tokenURI,
+        toWei(price),
+        // tokenId1,
+        listed,
+        auction,
+        auctionEndTime,
+        {
+          value: listingFee,
+        }
+      );
 
       const nftToken = await nftMarketPlaceContract.nfts(1);
       expect(+fromWei(nftToken.price)).to.equal(price);
@@ -72,7 +70,7 @@ describe("NFTMarketPlace", () => {
       expect(+fromWei(nftToken.highestBid)).to.equal(0);
       expect(await nftMarketPlaceContract.ownerOf(1)).to.equal(addr1.address);
       expect(nftToken.itemId).to.equal(1);
-      expect(nftToken.tokenId1).to.equal(1);
+      expect(nftToken.tokenId).to.equal(1);
       expect(nftToken.nftOwner).to.equal(addr1.address);
       expect(tx)
         .to.emit(nftMarketPlaceContract, "MarketItemCreated")
@@ -82,20 +80,17 @@ describe("NFTMarketPlace", () => {
     it("Should create nft token and if listed, nft should be transferred to the marketplace ", async () => {
       listed = true;
 
-      const tx = await nftMarketPlaceContract
-        .connect(addr1)
-        .createNftToken(
-          tokenURI,
-          toWei(price),
-          tokenId2,
-          listed,
-          auction,
-          auctionEndTime,
-          {
-            value: listingFee,
-          }
-        );
-
+      const tx = await nftMarketPlaceContract.connect(addr1).createNftToken(
+        tokenURI,
+        toWei(price),
+        // tokenId2,
+        listed,
+        auction,
+        auctionEndTime,
+        {
+          value: listingFee,
+        }
+      );
       const nftToken = await nftMarketPlaceContract.nfts(1);
       expect(+fromWei(nftToken.price)).to.equal(price);
       expect(nftToken.listed).to.equal(listed);
@@ -107,7 +102,7 @@ describe("NFTMarketPlace", () => {
         nftMarketPlaceContract.address
       );
       expect(nftToken.itemId).to.equal(1);
-      expect(nftToken.tokenId2).to.equal(2);
+      expect(nftToken.tokenId).to.equal(1);
       expect(nftToken.nftOwner).to.equal(addr1.address);
       expect(tx)
         .to.emit(nftMarketPlaceContract, "MarketItemCreated")
@@ -118,14 +113,12 @@ describe("NFTMarketPlace", () => {
       auction = true;
       listed = false;
       auctionEndTime = _auctionEnd;
-      const tokenId = 3;
 
       const tx = await nftMarketPlaceContract
         .connect(addr1)
         .createNftToken(
           tokenURI,
           toWei(price),
-          tokenId,
           listed,
           auction,
           auctionEndTime,
@@ -145,30 +138,89 @@ describe("NFTMarketPlace", () => {
         nftMarketPlaceContract.address
       );
       expect(nftToken.itemId).to.equal(1);
-      expect(nftToken.tokenId).to.equal(3);
+      expect(nftToken.tokenId).to.equal(1);
       expect(nftToken.nftOwner).to.equal(addr1.address);
       expect(tx)
         .to.emit(nftMarketPlaceContract, "MarketItemCreated")
         .withArgs(1, 1, addr1.address, price);
     });
 
-    // it("it should revert if token already exists", async () => {
-    //   expect(
-    //     nftMarketPlaceContract
-    //       .connect(addr1)
-    //       .createNftToken(
-    //         tokenURI,
-    //         toWei(price),
-    //         tokenId,
-    //         false,
-    //         false,
-    //         auctionEndTime,
-    //         {
-    //           value: listingFee,
-    //         }
-    //       )
-    //   ).to.be.revertedWith("ErrTokenExists");
-      // (nftMarketPlaceContract, "ErrTokenExists");
-    // });
+    it("Should revert if price is zero", async () => {
+      price = 0;
+      expect(
+        nftMarketPlaceContract
+          .connect(addr1)
+          .createNftToken(
+            tokenURI,
+            toWei(price),
+            listed,
+            auction,
+            auctionEndTime,
+            {
+              value: listingFee,
+            }
+          )
+      ).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrPriceZero");
+    });
+
+    it("Should revert if msg.value is less than listing fee", async () => {
+      price = 2.5;
+      expect(
+        nftMarketPlaceContract
+          .connect(addr1)
+          .createNftToken(
+            tokenURI,
+            toWei(price),
+            listed,
+            auction,
+            auctionEndTime,
+            {
+              value: toWei(0.000001),
+            }
+          )
+      ).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrListingFee");
+    });
+
+    it("Should revert if auction end time is less than current time", async () => {
+      price = 2.5;
+      auction = true;
+      auctionEndTime = block.timestamp - 10800;
+      expect(
+        nftMarketPlaceContract
+          .connect(addr1)
+          .createNftToken(
+            tokenURI,
+            toWei(price),
+            listed,
+            auction,
+            auctionEndTime,
+            {
+              value: listingFee,
+            }
+          )
+      ).to.be.revertedWithCustomError(
+        nftMarketPlaceContract,
+        "ErrAuctionEndTimeWrong"
+      );
+    });
+
+    it("Should revert if item is listed and auctioned", async () => {
+      listed = true;
+      auctionEndTime = block.timestamp + 10800;
+      expect(
+        nftMarketPlaceContract
+          .connect(addr1)
+          .createNftToken(
+            tokenURI,
+            toWei(price),
+            listed,
+            auction,
+            auctionEndTime,
+            {
+              value: listingFee,
+            }
+          )
+      ).to.be.revertedWithCustomError(nftMarketPlaceContract, "ErrItemListed");
+    });
   });
 });
