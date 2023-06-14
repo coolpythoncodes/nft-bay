@@ -1,4 +1,3 @@
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -16,17 +15,15 @@
 [![GitHub stars][star-shield]][star-url]
 [![GitHub license][license-shield]][license-url]
 
-
-
-# NFT Bay 
+# NFT Bay
 
 ### Brief description
 
-NFT Bay is a decentralized marketplace that empowers users to create, sell, and auction Non-Fungible Tokens (NFTs). 
+NFT Bay is a decentralized marketplace that empowers users to create, sell, and auction Non-Fungible Tokens (NFTs).
 
-NFT Bay enables creators to mint and showcase their unique NFT creations, while buyers can browse a diverse range of digital assets and securely transact using cryptocurrency. 
+NFT Bay enables creators to mint and showcase their unique NFT creations, while buyers can browse a diverse range of digital assets and securely transact using cryptocurrency.
 
-Through its auction functionality, NFT Bay offers an exciting opportunity for users to participate in bidding wars and discover rare and exclusive NFTs. 
+Through its auction functionality, NFT Bay offers an exciting opportunity for users to participate in bidding wars and discover rare and exclusive NFTs.
 
 With a focus on community, transparency, and innovation, NFT Bay aims to revolutionize the NFT ecosystem by fostering creativity, enabling fair value exchange, and empowering artists and collectors alike with royalties.
 
@@ -40,21 +37,51 @@ This project was bootstrapped with [`create-t3-app`](https://create.t3.gg/).
 - wagmi
 - Web3Modal
 - NFT.storage
+- Polygon chain
 
 ### Install
+
 ```bash
 git clone https://github.com/coolpythoncodes/nft-bay
 
 yarn install
 
-# create a web3modal project from https://cloud.walletconnect.com/sign-in 
+# create a web3modal project from https://cloud.walletconnect.com/sign-in
 # to get WEB3_MODAL_PROJECT_ID
+
+# create a nft.storage account from https://nft.storage/
+# to get NFT_STORAGE_API_KEY
+
+# create a polygon scan account from https://polygonscan.com/myapikey
+# to get POLYGONSCAN_API_KEY
 
 - Copy `.env.example` to a new `.env` file on nft-bay root folder
 
-#Get your web development server running.
+- Add your `WEB3_MODAL_PROJECT_ID` and `NFT_STORAGE_API_KEY` to the `.env` file
+
+-  Copy `secret.example.json` to a new `secret.json` // ensure you don't expose this to the public
+
+- Add your `polygonScanApiKey` and `privateKey` to the `secret.json` file
+
+# Compile your smart contracts.
+pnpm hardhat compile
+
+# Deploy on polygon mumbai testnet
+
+npx hardhat run scripts/deploy.js --network polygon_mumbai
+
+# the deployed contract address will be displayed on the console and stored in `src/data/NFTMarketPlace-address.json`
+
+# Verify your smart contracts on polygonscan
+
+pnpm hardhat verify --network polygon_mumbai <contract_address>
+
+# Get your web development server running.
 pnpm dev
+
 ```
+
+
 
 ## 🤝 Contributing
 
@@ -69,7 +96,9 @@ Give a ⭐ if you like this project!
 ## Useful links
 
 - [Web3Modal Project ID](https://cloud.walletconnect.com/sign-in)
-
+- [NFT Storage](https://nft.storage/)
+- [Polygon Scan api key](https://polygonscan.com/myapikey)
+- [Verified NFT Bay address on Polygon scan](https://mumbai.polygonscan.com/address/0x88c301AEF5EB979F30a781b2Cb13019218AbA7C3#code)
 
 [contributors-shield]: https://img.shields.io/github/contributors/coolpythoncodes/nft-bay?style=for-the-badge
 [contributors-url]: https://github.com/coolpythoncodes/nft-bay/graphs/contributors

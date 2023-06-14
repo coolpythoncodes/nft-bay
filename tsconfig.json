@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-  ],
+, "hardhat.config.js"  ],
   "exclude": ["node_modules"]
 }
