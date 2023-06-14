@@ -6,21 +6,14 @@ import {
   Radio,
   type RadioChangeEvent,
   Button,
-  message,
 } from "antd";
 import React, { useState } from "react";
 import UploadInput from "../../components/inputs/upload";
 import { NFTStorage } from "nft.storage";
 import { env } from "~/env.mjs";
 import {
-  useNftMarketPlace1GetListingPriceFee,
-  useNftMarketPlaceCreateNftToken,
-  
-  usePrepareNftMarketPlaceCreateNftToken,
+  useNftMarketPlaceGetListingPriceFee,
 } from "~/generated";
-import { toWei } from "~/utils/helper";
-import { nftMarketPlaceAbi, nftMarketPlaceAddress } from "~/utils/data";
-import { useContractRead } from "wagmi";
 
 interface IInitialFormData {
   title: string;
@@ -36,7 +29,7 @@ const CreateNftForm = () => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
-  const [metaUrl, setMetaUrl] = useState<string>("")
+  const [metaUrl, setMetaUrl] = useState<string>("");
   const [uploadUrl, setUploadUrl] = useState<string>("");
   const [method, setMethod] = useState("listing");
   const [desc, setDesc] = useState("");
@@ -60,32 +53,11 @@ const CreateNftForm = () => {
     nftImageUrl: uploadUrl,
   };
 
-  // const {data:listingFee,error,} = useNftMarketPlace1GetListingPriceFee(
-  // )
-  const { data:listingFee, error, isLoading } = useContractRead({
-    address: nftMarketPlaceAddress,
-    abi: nftMarketPlaceAbi.abi,
-    functionName: 'getListingPriceFee',
-  })
-  console.log("listingFeee", listingFee);
-  console.log("error", error);
+  const { data: listingFee } = useNftMarketPlaceGetListingPriceFee();
+  console.log("listingFee", listingFee);
 
-//   const { config } = usePrepareNftMarketPlaceCreateNftToken({
-//     args: [
-//       metaUrl,
-//       toWei(form.getFieldValue("price")),
-//       form.getFieldValue("method") === "listing",
-//       form.getFieldValue("method") === "auction",
-//       form.getFieldValue("endAt"),
-//     ],
-// value:parse()
-//   });
-  // const { isLoading, data, isSuccess, writeAsync } =
-  //   useNftMarketPlaceCreateNftToken(config);
+console.log(metaUrl)
 
-  // if (data) {
-  //   JSON.stringify(data);
-  // }
 
   const handleClick = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -93,25 +65,15 @@ const CreateNftForm = () => {
     const values = await form.validateFields();
 
     const nftMetaData = await client.store({
-      name: values.title,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+      name: values.title ,
+       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
       description: values.description,
+       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
       image: values.nftImageUrl,
     });
     setMetaUrl(nftMetaData.url)
-    // const res = await writeAsync?.({
 
-    // })
-    // console.log("res", res?.hash);
-    // const res = await writeAsync({
-      // args: [
-      //   nftMetaData.url,
-      //   toWei(values.price),
-      //   values.method === "listing",
-      //   values.method === "auction",
-      //   values.endAt,
-      // ],
-    // });
-    // useNftMarketPlaceCreateNftToken
     console.log("nftMetaData url", nftMetaData.url);
   };
 

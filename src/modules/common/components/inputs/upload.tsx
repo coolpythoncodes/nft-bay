@@ -19,10 +19,11 @@ interface UploadFormProps {
 
 const UploadInput = ({ onChange }: UploadFormProps) => {
   // const [file, setFile] = useState<UploadFile | File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
 
   const handleFileChange = (info: UploadChangeParam<UploadFile>) => {
     // setFile(info.file.originFileObj as File);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     onChange(info.file.originFileObj);
   };
 

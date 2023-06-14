@@ -1,4 +1,4 @@
-import { polygon, bscTestnet, sepolia, evmosTestnet, hardhat,localhost } from "@wagmi/chains";
+import { polygonMumbai } from "@wagmi/chains";
 import {
   EthereumClient,
   w3mConnectors,
@@ -7,7 +7,7 @@ import {
 import { env } from "~/env.mjs";
 import { configureChains, createConfig } from "wagmi";
 
-const chains = [hardhat,localhost];
+const chains = [polygonMumbai];
 
 const { publicClient } = configureChains(chains, [
   w3mProvider({ projectId: env.NEXT_PUBLIC_WEB3_MODAL_PROJECT_ID }),

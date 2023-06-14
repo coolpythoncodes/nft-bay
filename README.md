@@ -76,12 +76,14 @@ npx hardhat run scripts/deploy.js --network polygon_mumbai
 
 pnpm hardhat verify --network polygon_mumbai <contract_address>
 
+# run the script below to generate the types for the contract
+
+pnpm wagmi generate
+
 # Get your web development server running.
 pnpm dev
 
 ```
-
-
 
 ## 🤝 Contributing
 
