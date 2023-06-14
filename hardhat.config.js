@@ -1,5 +1,9 @@
 require("@nomicfoundation/hardhat-toolbox");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { privateKey, polygonScanApiKey } = require("./secret.json");
+
+
+
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   defaultNetwork: "polygon_mumbai",
