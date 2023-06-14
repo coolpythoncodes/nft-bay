@@ -18,13 +18,12 @@ interface UploadFormProps {
 }
 
 const UploadInput = ({ onChange }: UploadFormProps) => {
-  const [file, setFile] = useState<UploadFile | File | null>(null);
+  // const [file, setFile] = useState<UploadFile | File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = (info: UploadChangeParam<UploadFile>) => {
-    setFile(info.file.originFileObj as File);
-
-    onChange("hiii");
+    // setFile(info.file.originFileObj as File);
+    onChange(info.file.originFileObj);
   };
 
   return (

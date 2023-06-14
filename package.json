@@ -23,6 +23,7 @@
     "antd": "^5.5.2",
     "chains": "link:@wagmi/core/chains",
     "next": "^13.4.2",
+    "nft.storage": "^7.1.0",
     "numeral": "^2.0.6",
     "plugins": "link:@wagmi/cli/plugins",
     "react": "18.2.0",

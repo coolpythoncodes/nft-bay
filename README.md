@@ -39,6 +39,7 @@ This project was bootstrapped with [`create-t3-app`](https://create.t3.gg/).
 - Solidity
 - wagmi
 - Web3Modal
+- NFT.storage
 
 ### Install
 ```bash
